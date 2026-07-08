@@ -1,13 +1,33 @@
-import { Container } from "@medusajs/ui"
+﻿import { Container } from "@medusajs/ui"
 
 import ChevronDown from "@modules/common/icons/chevron-down"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { convertToLocale } from "@lib/util/money"
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 
 type OverviewProps = {
-  customer: HttpTypes.StoreCustomer | null
-  orders: HttpTypes.StoreOrder[] | null
+  customer: BackendCustomer | null
+  orders: BackendOrder[] | null
 }
 
 const Overview = ({ customer, orders }: OverviewProps) => {
@@ -135,7 +155,7 @@ const Overview = ({ customer, orders }: OverviewProps) => {
   )
 }
 
-const getProfileCompletion = (customer: HttpTypes.StoreCustomer | null) => {
+const getProfileCompletion = (customer: BackendCustomer | null) => {
   let count = 0
 
   if (!customer) {

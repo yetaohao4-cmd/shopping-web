@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { Popover, PopoverPanel, Transition } from "@headlessui/react"
 import { ArrowRightMini, XMark } from "@medusajs/icons"
@@ -8,7 +8,27 @@ import { Fragment } from "react"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import CountrySelect from "../country-select"
 import LanguageSelect from "../language-select"
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 import { Locale } from "@lib/data/locales"
 
 const SideMenuItems = {
@@ -19,7 +39,7 @@ const SideMenuItems = {
 }
 
 type SideMenuProps = {
-  regions: HttpTypes.StoreRegion[] | null
+  regions: BackendRegion[] | null
   locales: Locale[] | null
   currentLocale: string | null
 }
@@ -126,7 +146,7 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                         />
                       </div>
                       <Text className="flex justify-between txt-compact-small">
-                        © {new Date().getFullYear()} Medusa Store. All rights
+                        漏 {new Date().getFullYear()} Medusa Store. All rights
                         reserved.
                       </Text>
                     </div>

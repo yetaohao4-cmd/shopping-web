@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { clx } from "@medusajs/ui"
 import { ArrowRightOnRectangle } from "@medusajs/icons"
@@ -9,13 +9,33 @@ import User from "@modules/common/icons/user"
 import MapPin from "@modules/common/icons/map-pin"
 import Package from "@modules/common/icons/package"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 import { signout } from "@lib/data/customer"
 
 const AccountNav = ({
   customer,
 }: {
-  customer: HttpTypes.StoreCustomer | null
+  customer: BackendCustomer | null
 }) => {
   const route = usePathname()
   const { countryCode } = useParams() as { countryCode: string }

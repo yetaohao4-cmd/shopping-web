@@ -1,8 +1,28 @@
-import { convertToLocale } from "@lib/util/money"
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+﻿import { convertToLocale } from "@lib/util/money"
+import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 
 type OrderSummaryProps = {
-  order: HttpTypes.StoreOrder
+  order: BackendOrder
 }
 
 const OrderSummary = ({ order }: OrderSummaryProps) => {

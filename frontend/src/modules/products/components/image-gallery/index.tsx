@@ -1,9 +1,29 @@
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+﻿import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 import { Container } from "@medusajs/ui"
 import Image from "next/image"
 
 type ImageGalleryProps = {
-  images: HttpTypes.StoreProductImage[]
+  images: BackendProductImage[]
 }
 
 const ImageGallery = ({ images }: ImageGalleryProps) => {

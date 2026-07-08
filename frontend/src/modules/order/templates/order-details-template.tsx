@@ -1,7 +1,27 @@
-"use client"
+﻿"use client"
 
 import { XMark } from "@medusajs/icons"
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import Help from "@modules/order/components/help"
 import Items from "@modules/order/components/items"
@@ -11,7 +31,7 @@ import ShippingDetails from "@modules/order/components/shipping-details"
 import React from "react"
 
 type OrderDetailsTemplateProps = {
-  order: HttpTypes.StoreOrder
+  order: BackendOrder
 }
 
 const OrderDetailsTemplate: React.FC<OrderDetailsTemplateProps> = ({

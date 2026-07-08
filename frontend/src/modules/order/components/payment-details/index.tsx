@@ -1,12 +1,32 @@
-import { Container, Heading, Text } from "@medusajs/ui"
+﻿import { Container, Heading, Text } from "@medusajs/ui"
 
 import { isStripeLike, paymentInfoMap } from "@lib/constants"
 import Divider from "@modules/common/components/divider"
 import { convertToLocale } from "@lib/util/money"
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 
 type PaymentDetailsProps = {
-  order: HttpTypes.StoreOrder
+  order: BackendOrder
 }
 
 const PaymentDetails = ({ order }: PaymentDetailsProps) => {

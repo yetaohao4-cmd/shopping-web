@@ -1,14 +1,34 @@
-"use client"
+ï»¿"use client"
 
 import Back from "@modules/common/icons/back"
 import FastDelivery from "@modules/common/icons/fast-delivery"
 import Refresh from "@modules/common/icons/refresh"
 
 import Accordion from "./accordion"
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 
 type ProductTabsProps = {
-  product: HttpTypes.StoreProduct
+  product: BackendProduct
 }
 
 const ProductTabs = ({ product }: ProductTabsProps) => {
@@ -108,7 +128,7 @@ const ShippingInfoTab = () => {
             <span className="font-semibold">Easy returns</span>
             <p className="max-w-sm">
               Just return your product and we&apos;ll refund your money. No
-              questions asked â€?we&apos;ll do our best to make sure your return
+              questions asked - we&apos;ll do our best to make sure your return
               is hassle-free.
             </p>
           </div>

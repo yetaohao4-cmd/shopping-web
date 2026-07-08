@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import React, { useEffect, useMemo, useActionState } from "react"
 
@@ -6,12 +6,32 @@ import Input from "@modules/common/components/input"
 import NativeSelect from "@modules/common/components/native-select"
 
 import AccountInfo from "../account-info"
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 import { addCustomerAddress, updateCustomerAddress } from "@lib/data/customer"
 
 type MyInformationProps = {
-  customer: HttpTypes.StoreCustomer
-  regions: HttpTypes.StoreRegion[]
+  customer: BackendCustomer
+  regions: BackendRegion[]
 }
 
 const ProfileBillingAddress: React.FC<MyInformationProps> = ({

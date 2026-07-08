@@ -1,4 +1,24 @@
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+﻿import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 import { Table, Text } from "@medusajs/ui"
 
 import LineItemOptions from "@modules/common/components/line-item-options"
@@ -7,7 +27,7 @@ import LineItemUnitPrice from "@modules/common/components/line-item-unit-price"
 import Thumbnail from "@modules/products/components/thumbnail"
 
 type ItemProps = {
-  item: HttpTypes.StoreCartLineItem | HttpTypes.StoreOrderLineItem
+  item: BackendCartLineItem | BackendOrderLineItem
   currencyCode: string
 }
 

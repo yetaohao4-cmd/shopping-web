@@ -1,7 +1,27 @@
-import { Text } from "@medusajs/ui"
+﻿import { Text } from "@medusajs/ui"
 import { listProducts } from "@lib/data/products"
 import { getProductPrice } from "@lib/util/get-product-price"
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import Thumbnail from "../thumbnail"
 import PreviewPrice from "./price"
@@ -11,9 +31,9 @@ export default async function ProductPreview({
   isFeatured,
   region,
 }: {
-  product: HttpTypes.StoreProduct
+  product: BackendProduct
   isFeatured?: boolean
-  region: HttpTypes.StoreRegion
+  region: BackendRegion
 }) {
   // const pricedProduct = await listProducts({
   //   regionId: region.id,

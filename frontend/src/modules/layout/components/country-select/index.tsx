@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import {
   Listbox,
@@ -13,7 +13,27 @@ import ReactCountryFlag from "react-country-flag"
 import { StateType } from "@lib/hooks/use-toggle-state"
 import { useParams, usePathname } from "next/navigation"
 import { updateRegion } from "@lib/data/cart"
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 
 type CountryOption = {
   country: string
@@ -23,7 +43,7 @@ type CountryOption = {
 
 type CountrySelectProps = {
   toggleState: StateType
-  regions: Array<HttpTypes.StoreRegion | any>
+  regions: Array<BackendRegion | any>
 }
 
 const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {

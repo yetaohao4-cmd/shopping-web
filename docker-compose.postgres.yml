@@ -20,6 +20,13 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+    networks:
+      - shopping-net
+
+networks:
+  shopping-net:
+    name: shopping-net
+    driver: bridge
 
 volumes:
   shopping_postgres_data:

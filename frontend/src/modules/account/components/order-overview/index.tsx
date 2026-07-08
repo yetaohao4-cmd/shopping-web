@@ -1,12 +1,32 @@
-"use client"
+﻿"use client"
 
 import { Button } from "@medusajs/ui"
 
 import OrderCard from "../order-card"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 
-const OrderOverview = ({ orders }: { orders: HttpTypes.StoreOrder[] }) => {
+const OrderOverview = ({ orders }: { orders: BackendOrder[] }) => {
   if (orders?.length) {
     return (
       <div className="flex flex-col gap-y-8 w-full">

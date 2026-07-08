@@ -1,4 +1,24 @@
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+﻿import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 import { Container } from "@medusajs/ui"
 import Checkbox from "@modules/common/components/checkbox"
 import Input from "@modules/common/components/input"
@@ -13,8 +33,8 @@ const ShippingAddress = ({
   checked,
   onChange,
 }: {
-  customer: HttpTypes.StoreCustomer | null
-  cart: HttpTypes.StoreCart | null
+  customer: BackendCustomer | null
+  cart: BackendCart | null
   checked: boolean
   onChange: () => void
 }) => {
@@ -46,7 +66,7 @@ const ShippingAddress = ({
   )
 
   const setFormAddress = (
-    address?: HttpTypes.StoreCartAddress,
+    address?: BackendAddress,
     email?: string
   ) => {
     address &&
@@ -104,7 +124,7 @@ const ShippingAddress = ({
             addressInput={
               mapKeys(formData, (_, key) =>
                 key.replace("shipping_address.", "")
-              ) as HttpTypes.StoreCartAddress
+              ) as BackendAddress
             }
             onSelect={setFormAddress}
           />

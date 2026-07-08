@@ -1,5 +1,25 @@
-import { listProducts } from "@lib/data/products"
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+﻿import { listProducts } from "@lib/data/products"
+import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 import ProductActions from "@modules/products/components/product-actions"
 
 /**
@@ -10,7 +30,7 @@ export default async function ProductActionsWrapper({
   region,
 }: {
   id: string
-  region: HttpTypes.StoreRegion
+  region: BackendRegion
 }) {
   const product = await listProducts({
     queryParams: { id: [id] },

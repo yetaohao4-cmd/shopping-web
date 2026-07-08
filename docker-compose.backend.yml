@@ -1,0 +1,36 @@
+services:
+  backend:
+    image: python:3.14.6-slim-trixie
+    container_name: shopping-backend
+    working_dir: /app
+    restart: unless-stopped
+    environment:
+      PYTHONUNBUFFERED: "1"
+      PYTHONPATH: /app
+      TZ: Asia/Shanghai
+      DATABASE_URL: postgresql://shopping_user:shopping_password@postgres:5432/shopping
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./backend:/app
+    command:
+      - /bin/sh
+      - -c
+      - >
+        python -m pip install --no-cache-dir -r requirements.txt
+        && uvicorn online_shopping.api.app:app --host 0.0.0.0 --port 8001 --reload
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/health', timeout=3)"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - shopping-net
+
+networks:
+  shopping-net:
+    name: shopping-net
+    driver: bridge

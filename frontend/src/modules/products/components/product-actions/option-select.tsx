@@ -1,9 +1,29 @@
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+﻿import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 import { clx } from "@medusajs/ui"
 import React from "react"
 
 type OptionSelectProps = {
-  option: HttpTypes.StoreProductOption
+  option: BackendProductOption
   current: string | undefined
   updateOption: (title: string, value: string) => void
   title: string

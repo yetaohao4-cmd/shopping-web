@@ -1,10 +1,30 @@
-import { listProducts } from "@lib/data/products"
+﻿import { listProducts } from "@lib/data/products"
 import { getRegion } from "@lib/data/regions"
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 import Product from "../product-preview"
 
 type RelatedProductsProps = {
-  product: HttpTypes.StoreProduct
+  product: BackendProduct
   countryCode: string
 }
 

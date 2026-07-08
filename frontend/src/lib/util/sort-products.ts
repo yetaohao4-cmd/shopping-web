@@ -1,7 +1,27 @@
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+﻿import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 
-interface MinPricedProduct extends HttpTypes.StoreProduct {
+interface MinPricedProduct extends BackendProduct {
   _minPrice?: number
 }
 
@@ -12,9 +32,9 @@ interface MinPricedProduct extends HttpTypes.StoreProduct {
  * @returns products sorted by price
  */
 export function sortProducts(
-  products: HttpTypes.StoreProduct[],
+  products: BackendProduct[],
   sortBy: SortOptions
-): HttpTypes.StoreProduct[] {
+): BackendProduct[] {
   let sortedProducts = products as MinPricedProduct[]
 
   if (["price_asc", "price_desc"].includes(sortBy)) {

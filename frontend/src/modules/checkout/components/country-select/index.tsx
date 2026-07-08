@@ -1,14 +1,34 @@
-import { forwardRef, useImperativeHandle, useMemo, useRef } from "react"
+﻿import { forwardRef, useImperativeHandle, useMemo, useRef } from "react"
 
 import NativeSelect, {
   NativeSelectProps,
 } from "@modules/common/components/native-select"
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 
 const CountrySelect = forwardRef<
   HTMLSelectElement,
   NativeSelectProps & {
-    region?: HttpTypes.StoreRegion
+    region?: BackendRegion
   }
 >(({ placeholder = "Country", region, defaultValue, ...props }, ref) => {
   const innerRef = useRef<HTMLSelectElement>(null)

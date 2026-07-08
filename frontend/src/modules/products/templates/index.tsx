@@ -1,4 +1,4 @@
-import React, { Suspense } from "react"
+﻿import React, { Suspense } from "react"
 
 import ImageGallery from "@modules/products/components/image-gallery"
 import ProductActions from "@modules/products/components/product-actions"
@@ -8,15 +8,35 @@ import RelatedProducts from "@modules/products/components/related-products"
 import ProductInfo from "@modules/products/templates/product-info"
 import SkeletonRelatedProducts from "@modules/skeletons/templates/skeleton-related-products"
 import { notFound } from "next/navigation"
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 
 import ProductActionsWrapper from "./product-actions-wrapper"
 
 type ProductTemplateProps = {
-  product: HttpTypes.StoreProduct
-  region: HttpTypes.StoreRegion
+  product: BackendProduct
+  region: BackendRegion
   countryCode: string
-  images: HttpTypes.StoreProductImage[]
+  images: BackendProductImage[]
 }
 
 const ProductTemplate: React.FC<ProductTemplateProps> = ({

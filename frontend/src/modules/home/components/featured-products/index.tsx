@@ -1,12 +1,32 @@
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+﻿import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 import ProductRail from "@modules/home/components/featured-products/product-rail"
 
 export default async function FeaturedProducts({
   collections,
   region,
 }: {
-  collections: HttpTypes.StoreCollection[]
-  region: HttpTypes.StoreRegion
+  collections: BackendCollection[]
+  region: BackendRegion
 }) {
   return collections.map((collection) => (
     <li key={collection.id}>

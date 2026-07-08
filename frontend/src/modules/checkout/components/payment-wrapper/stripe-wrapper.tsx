@@ -1,12 +1,32 @@
-"use client"
+﻿"use client"
 
 import { Stripe, StripeElementsOptions } from "@stripe/stripe-js"
 import { Elements } from "@stripe/react-stripe-js"
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 import { createContext } from "react"
 
 type StripeWrapperProps = {
-  paymentSession: HttpTypes.StorePaymentSession
+  paymentSession: BackendPaymentSession
   stripeKey?: string
   stripePromise: Promise<Stripe | null> | null
   children: React.ReactNode

@@ -1,12 +1,32 @@
-import React from "react"
+﻿import React from "react"
 
 import AddAddress from "../address-card/add-address"
 import EditAddress from "../address-card/edit-address-modal"
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 
 type AddressBookProps = {
-  customer: HttpTypes.StoreCustomer
-  region: HttpTypes.StoreRegion
+  customer: BackendCustomer
+  region: BackendRegion
 }
 
 const AddressBook: React.FC<AddressBookProps> = ({ customer, region }) => {

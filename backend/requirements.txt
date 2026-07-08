@@ -1,0 +1,8 @@
+# Runtime dependencies used by online_shopping.
+fastapi>=0.115,<1.0
+pydantic>=2.7,<3.0
+uvicorn[standard]>=0.30,<1.0
+
+# Test dependencies used by FastAPI TestClient and pytest suites.
+httpx>=0.27,<1.0
+pytest>=8.0,<10.0

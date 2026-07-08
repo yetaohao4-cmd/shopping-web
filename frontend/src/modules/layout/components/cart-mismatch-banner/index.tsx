@@ -2,13 +2,13 @@
 
 import { transferCart } from "@lib/data/customer"
 import { ExclamationCircleSolid } from "@medusajs/icons"
-import type { StoreCart, StoreCustomer } from "types/backend-native-compat"
+import type { BackendCart, BackendCustomer } from "types/backend"
 import { Button } from "@medusajs/ui"
 import { useState } from "react"
 
 function CartMismatchBanner(props: {
-  customer: StoreCustomer
-  cart: StoreCart
+  customer: BackendCustomer
+  cart: BackendCart
 }) {
   const { customer, cart } = props
   const [isPending, setIsPending] = useState(false)

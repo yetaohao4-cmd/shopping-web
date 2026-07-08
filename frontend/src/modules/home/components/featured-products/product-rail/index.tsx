@@ -1,5 +1,25 @@
-import { listProducts } from "@lib/data/products"
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+﻿import { listProducts } from "@lib/data/products"
+import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 import { Text } from "@medusajs/ui"
 
 import InteractiveLink from "@modules/common/components/interactive-link"
@@ -9,8 +29,8 @@ export default async function ProductRail({
   collection,
   region,
 }: {
-  collection: HttpTypes.StoreCollection
-  region: HttpTypes.StoreRegion
+  collection: BackendCollection
+  region: BackendRegion
 }) {
   const {
     response: { products: pricedProducts },

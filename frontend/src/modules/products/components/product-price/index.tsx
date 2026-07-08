@@ -1,14 +1,34 @@
-import { clx } from "@medusajs/ui"
+﻿import { clx } from "@medusajs/ui"
 
 import { getProductPrice } from "@lib/util/get-product-price"
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 
 export default function ProductPrice({
   product,
   variant,
 }: {
-  product: HttpTypes.StoreProduct
-  variant?: HttpTypes.StoreProductVariant
+  product: BackendProduct
+  variant?: BackendProductVariant
 }) {
   const { cheapestPrice, variantPrice } = getProductPrice({
     product,

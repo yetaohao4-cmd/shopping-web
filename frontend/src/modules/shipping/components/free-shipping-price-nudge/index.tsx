@@ -1,21 +1,20 @@
-"use client"
+﻿"use client"
 
 import { convertToLocale } from "@lib/util/money"
 import { CheckCircleSolid, XMark } from "@medusajs/icons"
 import type {
-  BackendNativeHttpTypes as HttpTypes,
-  StoreCart,
-  StoreCartShippingOption,
-  StorePrice,
-} from "types/backend-native-compat"
+  BackendCart,
+  BackendFreeShippingPrice,
+  BackendPrice,
+  BackendShippingOption,
+} from "types/backend"
 import { Button, clx } from "@medusajs/ui"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { useState } from "react"
-import { StoreFreeShippingPrice } from "types/global"
 
 const computeTarget = (
-  cart: HttpTypes.StoreCart,
-  price: HttpTypes.StorePrice
+  cart: BackendCart,
+  price: BackendPrice
 ) => {
   const priceRule = (price.price_rules || []).find(
     (pr) => pr.attribute === "item_total"
@@ -78,8 +77,8 @@ export default function ShippingPriceNudge({
   shippingOptions,
 }: {
   variant?: "popup" | "inline"
-  cart: StoreCart
-  shippingOptions: StoreCartShippingOption[]
+  cart: BackendCart
+  shippingOptions: BackendShippingOption[]
 }) {
   if (!cart || !shippingOptions?.length) {
     return
@@ -134,12 +133,8 @@ function FreeShippingInline({
   cart,
   price,
 }: {
-  cart: StoreCart
-  price: StorePrice & {
-    target_reached: boolean
-    target_remaining: number
-    remaining_percentage: number
-  }
+  cart: BackendCart
+  price: BackendFreeShippingPrice
 }) {
   return (
     <div className="bg-neutral-100 p-2 rounded-lg border">
@@ -192,8 +187,8 @@ function FreeShippingPopup({
   cart,
   price,
 }: {
-  cart: StoreCart
-  price: StoreFreeShippingPrice
+  cart: BackendCart
+  price: BackendFreeShippingPrice
 }) {
   const [isClosed, setIsClosed] = useState(false)
 

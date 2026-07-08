@@ -1,17 +1,37 @@
-import { Listbox, Transition } from "@headlessui/react"
+﻿import { Listbox, Transition } from "@headlessui/react"
 import { ChevronUpDown } from "@medusajs/icons"
 import { clx } from "@medusajs/ui"
 import { Fragment, useMemo } from "react"
 
 import Radio from "@modules/common/components/radio"
 import compareAddresses from "@lib/util/compare-addresses"
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 
 type AddressSelectProps = {
-  addresses: HttpTypes.StoreCustomerAddress[]
-  addressInput: HttpTypes.StoreCartAddress | null
+  addresses: BackendRecord[]
+  addressInput: BackendAddress | null
   onSelect: (
-    address: HttpTypes.StoreCartAddress | undefined,
+    address: BackendAddress | undefined,
     email?: string
   ) => void
 }
@@ -24,7 +44,7 @@ const AddressSelect = ({
   const handleSelect = (id: string) => {
     const savedAddress = addresses.find((a) => a.id === id)
     if (savedAddress) {
-      onSelect(savedAddress as HttpTypes.StoreCartAddress)
+      onSelect(savedAddress as BackendAddress)
     }
   }
 

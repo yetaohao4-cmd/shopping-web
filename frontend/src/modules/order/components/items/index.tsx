@@ -1,5 +1,25 @@
-import repeat from "@lib/util/repeat"
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+﻿import repeat from "@lib/util/repeat"
+import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 import { Table } from "@medusajs/ui"
 
 import Divider from "@modules/common/components/divider"
@@ -7,7 +27,7 @@ import Item from "@modules/order/components/item"
 import SkeletonLineItem from "@modules/skeletons/components/skeleton-line-item"
 
 type ItemsProps = {
-  order: HttpTypes.StoreOrder
+  order: BackendOrder
 }
 
 const Items = ({ order }: ItemsProps) => {

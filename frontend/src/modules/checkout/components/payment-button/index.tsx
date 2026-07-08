@@ -1,15 +1,35 @@
-"use client"
+﻿"use client"
 
 import { isManual, isStripeLike } from "@lib/constants"
 import { placeOrder } from "@lib/data/cart"
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 import { Button } from "@medusajs/ui"
 import { useElements, useStripe } from "@stripe/react-stripe-js"
 import React, { useState } from "react"
 import ErrorMessage from "../error-message"
 
 type PaymentButtonProps = {
-  cart: HttpTypes.StoreCart
+  cart: BackendCart
   "data-testid": string
 }
 
@@ -49,7 +69,7 @@ const StripePaymentButton = ({
   notReady,
   "data-testid": dataTestId,
 }: {
-  cart: HttpTypes.StoreCart
+  cart: BackendCart
   notReady: boolean
   "data-testid"?: string
 }) => {

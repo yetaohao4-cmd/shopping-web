@@ -16,5 +16,5 @@ dev = [
 ]
 
 [tool.pytest.ini_options]
-pythonpath = ["src"]
-testpaths = ["src/online_shopping/tests"]
+pythonpath = ["."]
+testpaths = ["online_shopping/tests"]

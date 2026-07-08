@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { Button, Heading } from "@medusajs/ui"
 
@@ -6,15 +6,35 @@ import CartTotals from "@modules/common/components/cart-totals"
 import Divider from "@modules/common/components/divider"
 import DiscountCode from "@modules/checkout/components/discount-code"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 
 type SummaryProps = {
-  cart: HttpTypes.StoreCart & {
-    promotions: HttpTypes.StorePromotion[]
+  cart: BackendCart & {
+    promotions: BackendPromotion[]
   }
 }
 
-function getCheckoutStep(cart: HttpTypes.StoreCart) {
+function getCheckoutStep(cart: BackendCart) {
   if (!cart?.shipping_address?.address_1 || !cart.email) {
     return "address"
   } else if (cart?.shipping_methods?.length === 0) {

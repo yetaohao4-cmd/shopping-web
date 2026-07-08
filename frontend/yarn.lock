@@ -959,23 +959,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@medusajs/types@npm:latest":
-  version: 2.12.3
-  resolution: "@medusajs/types@npm:2.12.3"
-  dependencies:
-    bignumber.js: "npm:^9.1.2"
-  peerDependencies:
-    ioredis: ^5.4.1
-    vite: ^5.4.21
-  peerDependenciesMeta:
-    ioredis:
-      optional: true
-    vite:
-      optional: true
-  checksum: 10/7a619ff984508b64611487c9160c5e15f5ab99cf75deaf3c5f91afd9cb395e1ff50cd8a22e7943098a4b50039cb0fa97d908d923f68b53308a6c95209e7f8748
-  languageName: node
-  linkType: hard
-
 "@medusajs/ui-preset@npm:latest":
   version: 2.12.3
   resolution: "@medusajs/ui-preset@npm:2.12.3"
@@ -5287,13 +5270,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bignumber.js@npm:^9.1.2":
-  version: 9.3.1
-  resolution: "bignumber.js@npm:9.3.1"
-  checksum: 10/1be0372bf0d6d29d0a49b9e6a9cefbd54dad9918232ad21fcd4ec39030260773abf0c76af960c6b3b98d3115a3a71e61c6a111812d1395040a039cfa178e0245
-  languageName: node
-  linkType: hard
-
 "binary-extensions@npm:^2.0.0":
   version: 2.3.0
   resolution: "binary-extensions@npm:2.3.0"
@@ -7405,7 +7381,6 @@ __metadata:
     "@headlessui/react": "npm:^2.2.0"
     "@medusajs/icons": "npm:latest"
     "@medusajs/js-sdk": "npm:latest"
-    "@medusajs/types": "npm:latest"
     "@medusajs/ui": "npm:latest"
     "@medusajs/ui-preset": "npm:latest"
     "@radix-ui/react-accordion": "npm:^1.2.1"

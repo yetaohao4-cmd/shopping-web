@@ -1,4 +1,4 @@
-import type { StorePrice } from "types/backend-native-compat"
+export type { BackendFreeShippingPrice } from "types/backend"
 
 export type FeaturedProduct = {
   id: string
@@ -15,10 +15,4 @@ export type VariantPrice = {
   currency_code: string
   price_type: string
   percentage_diff: string
-}
-
-export type StoreFreeShippingPrice = StorePrice & {
-  target_reached: boolean
-  target_remaining: number
-  remaining_percentage: number
 }

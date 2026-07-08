@@ -1,10 +1,10 @@
-# Backend Contract
+﻿# Backend Contract
 
 ## Current Backend Shape
 
 The backend is now organized as a standalone FastAPI project under `backend/`.
 
-The source of truth remains the domain layer under `backend/src/online_shopping/domain` and the simple service layer under `backend/src/online_shopping/services`. The FastAPI boundary is under `backend/src/online_shopping/api` and exposes Pydantic DTOs with backend-style snake_case fields.
+The source of truth remains the domain layer under `backend/online_shopping/domain` and the simple service layer under `backend/online_shopping/services`. The FastAPI boundary is under `backend/online_shopping/api` and exposes Pydantic DTOs with backend-style snake_case fields.
 
 Current API scope is intentionally small and in-memory: products, categories, cart, orders, payment processing, and health checks. There is still no database, ORM mapping, persistence, or authentication middleware.
 
@@ -12,7 +12,7 @@ Current API scope is intentionally small and in-memory: products, categories, ca
 
 ### Account
 
-Source: `backend/src/online_shopping/domain/entities/account.py`
+Source: `backend/online_shopping/domain/entities/account.py`
 
 Fields from constructor:
 
@@ -47,10 +47,10 @@ Public behavior:
 
 Sources:
 
-* `backend/src/online_shopping/domain/entities/customer.py`
-* `backend/src/online_shopping/domain/entities/member.py`
-* `backend/src/online_shopping/domain/entities/guest.py`
-* `backend/src/online_shopping/domain/entities/admin.py`
+* `backend/online_shopping/domain/entities/customer.py`
+* `backend/online_shopping/domain/entities/member.py`
+* `backend/online_shopping/domain/entities/guest.py`
+* `backend/online_shopping/domain/entities/admin.py`
 
 Customer fields:
 
@@ -89,10 +89,10 @@ Admin behavior:
 
 Sources:
 
-* `backend/src/online_shopping/domain/entities/product.py`
-* `backend/src/online_shopping/domain/entities/product_category.py`
-* `backend/src/online_shopping/domain/entities/product_review.py`
-* `backend/src/online_shopping/domain/entities/catalog.py`
+* `backend/online_shopping/domain/entities/product.py`
+* `backend/online_shopping/domain/entities/product_category.py`
+* `backend/online_shopping/domain/entities/product_review.py`
+* `backend/online_shopping/domain/entities/catalog.py`
 
 Product fields:
 
@@ -146,8 +146,8 @@ Catalog behavior:
 
 Sources:
 
-* `backend/src/online_shopping/domain/entities/shopping_cart.py`
-* `backend/src/online_shopping/domain/entities/item.py`
+* `backend/online_shopping/domain/entities/shopping_cart.py`
+* `backend/online_shopping/domain/entities/item.py`
 
 ShoppingCart fields:
 
@@ -178,8 +178,8 @@ Item behavior:
 
 Sources:
 
-* `backend/src/online_shopping/domain/entities/order.py`
-* `backend/src/online_shopping/domain/entities/order_log.py`
+* `backend/online_shopping/domain/entities/order.py`
+* `backend/online_shopping/domain/entities/order_log.py`
 
 Order fields:
 
@@ -211,11 +211,11 @@ OrderLog fields:
 
 Sources:
 
-* `backend/src/online_shopping/domain/entities/payment.py`
-* `backend/src/online_shopping/domain/entities/credit_card.py`
-* `backend/src/online_shopping/domain/entities/credit_card_transaction.py`
-* `backend/src/online_shopping/domain/entities/electronic_bank_transfer.py`
-* `backend/src/online_shopping/domain/entities/electronic_bank_transaction.py`
+* `backend/online_shopping/domain/entities/payment.py`
+* `backend/online_shopping/domain/entities/credit_card.py`
+* `backend/online_shopping/domain/entities/credit_card_transaction.py`
+* `backend/online_shopping/domain/entities/electronic_bank_transfer.py`
+* `backend/online_shopping/domain/entities/electronic_bank_transaction.py`
 
 Payment fields:
 
@@ -268,8 +268,8 @@ ElectronicBankTransaction fields:
 
 Sources:
 
-* `backend/src/online_shopping/domain/entities/shipment.py`
-* `backend/src/online_shopping/domain/entities/shipment_log.py`
+* `backend/online_shopping/domain/entities/shipment.py`
+* `backend/online_shopping/domain/entities/shipment_log.py`
 
 Shipment fields:
 
@@ -296,9 +296,9 @@ ShipmentLog fields:
 
 Sources:
 
-* `backend/src/online_shopping/domain/entities/notification.py`
-* `backend/src/online_shopping/domain/entities/email_notification.py`
-* `backend/src/online_shopping/domain/entities/sms_notification.py`
+* `backend/online_shopping/domain/entities/notification.py`
+* `backend/online_shopping/domain/entities/email_notification.py`
+* `backend/online_shopping/domain/entities/sms_notification.py`
 
 Notification fields:
 
@@ -417,7 +417,7 @@ Values:
 
 ## Service Layer Summary
 
-Sources: `backend/src/online_shopping/services`
+Sources: `backend/online_shopping/services`
 
 | Service | Method | Input | Output | Current behavior |
 | --- | --- | --- | --- | --- |
@@ -428,7 +428,7 @@ Sources: `backend/src/online_shopping/services`
 
 ## API Endpoint Summary
 
-FastAPI entry point: `backend/src/online_shopping/api/app.py`
+FastAPI entry point: `backend/online_shopping/api/app.py`
 
 Run target:
 

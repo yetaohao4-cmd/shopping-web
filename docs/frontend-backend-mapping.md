@@ -21,25 +21,25 @@ Mappings below distinguish:
 
 | Backend entity | Current matching frontend type/interface | Recommended frontend type/interface | Notes |
 | --- | --- | --- | --- |
-| `Account` | `HttpTypes.StoreCustomer` partially | `BackendAccount`, `FrontendUser` | Current frontend customer lacks `user_name`, `status`, nested `Name`, and backend payment methods. |
-| `Customer` | `HttpTypes.StoreCustomer` partially | `BackendCustomer`, `FrontendCustomer` | Backend customer owns cart/orders/search; current frontend customer is Medusa customer profile. |
+| `Account` | Former starter customer shape partially | `BackendAccount`, `FrontendUser` | Current frontend customer lacks `user_name`, `status`, nested `Name`, and backend payment methods. |
+| `Customer` | Former starter customer shape partially | `BackendCustomer`, `FrontendCustomer` | Backend customer owns cart/orders/search; current frontend customer is still being migrated to the backend account/customer model. |
 | `Member` | None direct | `BackendMember`, `FrontendUser` | Represents registered customer with account. |
 | `Guest` | None direct | `BackendGuest` | Could map to anonymous visitor/cart state. |
 | `Admin` | None direct | `BackendAdmin`, `FrontendAdmin` | Current frontend has no admin UI. |
-| `Product` | `HttpTypes.StoreProduct` partially | `BackendProduct`, `FrontendProduct` | Backend uses `name`, `description`, `price`, `available_item_count`, `category`; frontend uses `title`, `handle`, `thumbnail`, variants. |
-| `ProductCategory` | `HttpTypes.StoreProductCategory` partially | `BackendProductCategory`, `FrontendCategory` | Backend category lacks handle/id in current domain. |
+| `Product` | Former starter product shape partially | `BackendProduct`, `FrontendProduct` | Backend uses `name`, `description`, `price`, `available_item_count`, `category`; some deep frontend components still have display assumptions like title/handle/thumbnail. |
+| `ProductCategory` | Backend category with starter-era display assumptions | `BackendProductCategory`, `FrontendCategory` | Backend category lacks handle/id in current domain. |
 | `ProductReview` | None direct | `BackendProductReview`, `FrontendProductReview` | No current review UI/type. |
 | `Catalog` | Collections/categories/product listing partially | `BackendCatalog`, `FrontendCatalogIndex` | Backend search methods not implemented; frontend currently relies on Medusa list endpoints. |
-| `ShoppingCart` | `HttpTypes.StoreCart` partially | `BackendShoppingCart`, `FrontendCart` | Backend cart has `items`; frontend cart has Medusa IDs, region, totals, promotions, shipping methods. |
-| `Item` | `HttpTypes.StoreCartLineItem` partially | `BackendCartItem`, `FrontendCartItem` | Backend item uses product/price/quantity; frontend line item uses line ID, variant/product, totals. |
-| `Order` | `HttpTypes.StoreOrder` partially | `BackendOrder`, `FrontendOrder` | Backend order has order_number/status/items/logs/shipments/payment; frontend expects Medusa order IDs/items/payment collections. |
+| `ShoppingCart` | Backend cart plus starter-era checkout assumptions | `BackendShoppingCart`, `FrontendCart` | Backend cart has `items`; some frontend checkout components still expect region, totals, promotions, and shipping methods. |
+| `Item` | Backend line item plus starter-era display assumptions | `BackendCartItem`, `FrontendCartItem` | Backend item uses product/price/quantity; some frontend line item components still expect line ID, variant/product, totals. |
+| `Order` | Backend order plus starter-era order display assumptions | `BackendOrder`, `FrontendOrder` | Backend order has order_number/status/items/logs/shipments/payment; some frontend order components still expect order IDs/items/payment collections. |
 | `OrderLog` | None direct | `BackendOrderLog`, `FrontendOrderStatusEvent` | No current frontend timeline type. |
 | `Payment` | Payment collection/provider types partially | `BackendPayment`, `FrontendPayment` | Current frontend maps to Medusa payment providers/sessions. |
 | `CreditCard` | Stripe card UI only | `BackendCreditCardPaymentMethod`, `FrontendCardPaymentForm` | Sensitive fields should not be returned raw. |
 | `CreditCardTransaction` | None direct | `BackendCreditCardTransaction`, `FrontendPaymentTransaction` | Current frontend does not expose this backend transaction model. |
 | `ElectronicBankTransfer` | None direct | `BackendBankTransferPaymentMethod`, `FrontendBankTransferForm` | No current bank transfer UI. |
 | `ElectronicBankTransaction` | None direct | `BackendBankTransferTransaction`, `FrontendPaymentTransaction` | No current bank transaction UI. |
-| `Shipment` | `StoreCartShippingOption` / order shipping display partially | `BackendShipment`, `FrontendShipment` | Backend shipment tracks actual shipment; frontend currently lists shipping options. |
+| `Shipment` | Checkout shipping option / order shipping display partially | `BackendShipment`, `FrontendShipment` | Backend shipment tracks actual shipment; frontend currently lists shipping options. |
 | `ShipmentLog` | None direct | `BackendShipmentLog`, `FrontendShipmentEvent` | No current shipment tracking timeline. |
 | `Notification` | None direct | `BackendNotification`, `FrontendNotification` | No current notification UI. |
 | `EmailNotification` | None direct | `BackendEmailNotification`, `FrontendNotification` | Notification channel type needed. |
@@ -284,10 +284,10 @@ Backend and current frontend use meaningfully different names:
 
 | Backend | Current frontend/Medusa | Issue |
 | --- | --- | --- |
-| `Product.name` | `StoreProduct.title` | Product adapter must rename. |
+| `Product.name` | Former starter `title` display field | Product UI should standardize on backend `name`. |
 | `Product.price` | variant calculated prices | Backend has simple price; frontend expects variant pricing. |
 | `Product.available_item_count` | `inventory_quantity` on variants | Inventory model differs. |
-| `ProductCategory.name` | `StoreProductCategory.name` | Mostly compatible, but frontend also expects `handle`, parent/children. |
+| `ProductCategory.name` | Backend category display name | Mostly compatible, but frontend also expects `handle`, parent/children. |
 | `Address.street` | `address_1` | Address adapter must map. |
 | `Address.state` | `province` | Address adapter must map. |
 | `Address.country` | `country_code` | Backend may store country name; frontend often expects ISO code. |

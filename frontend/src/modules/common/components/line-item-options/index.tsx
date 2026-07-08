@@ -1,10 +1,30 @@
-import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
+﻿import type {
+  BackendAddress,
+  BackendCart,
+  BackendCartLineItem,
+  BackendCollection,
+  BackendCustomer,
+  BackendOrder,
+  BackendOrderLineItem,
+  BackendPaymentSession,
+  BackendPrice,
+  BackendProduct,
+  BackendProductCategory,
+  BackendProductImage,
+  BackendProductListParams,
+  BackendProductOption,
+  BackendProductVariant,
+  BackendPromotion,
+  BackendRecord,
+  BackendRegion,
+  BackendShippingOption,
+} from "types/backend"
 import { Text } from "@medusajs/ui"
 
 type LineItemOptionsProps = {
-  variant: HttpTypes.StoreProductVariant | undefined
+  variant: BackendProductVariant | undefined
   "data-testid"?: string
-  "data-value"?: HttpTypes.StoreProductVariant
+  "data-value"?: BackendProductVariant
 }
 
 const LineItemOptions = ({
