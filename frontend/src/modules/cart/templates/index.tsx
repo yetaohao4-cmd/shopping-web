@@ -3,7 +3,7 @@ import Summary from "./summary"
 import EmptyCartMessage from "../components/empty-cart-message"
 import SignInPrompt from "../components/sign-in-prompt"
 import Divider from "@modules/common/components/divider"
-import { HttpTypes } from "@medusajs/types"
+import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
 
 const CartTemplate = ({
   cart,

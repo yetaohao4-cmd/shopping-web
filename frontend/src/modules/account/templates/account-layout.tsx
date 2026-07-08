@@ -3,7 +3,7 @@ import React from "react"
 import UnderlineLink from "@modules/common/components/interactive-link"
 
 import AccountNav from "../components/account-nav"
-import { HttpTypes } from "@medusajs/types"
+import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
 
 interface AccountLayoutProps {
   customer: HttpTypes.StoreCustomer | null

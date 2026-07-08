@@ -1,4 +1,4 @@
-import { HttpTypes } from "@medusajs/types"
+import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
 import { getPercentageDiff } from "./get-percentage-diff"
 import { convertToLocale } from "./money"
 

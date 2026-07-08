@@ -1,4 +1,4 @@
-import { HttpTypes } from "@medusajs/types"
+import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
 import Input from "@modules/common/components/input"
 import React, { useState } from "react"
 import CountrySelect from "../country-select"

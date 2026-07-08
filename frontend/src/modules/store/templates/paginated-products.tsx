@@ -1,70 +1,38 @@
-import { listProductsWithSort } from "@lib/data/products"
-import { getRegion } from "@lib/data/regions"
-import ProductPreview from "@modules/products/components/product-preview"
+import { listProducts } from "../../../api/backend"
+import {
+  backendProductName,
+  backendProductPrice,
+} from "../../../lib/backend-native"
+import BackendProductPreview from "@modules/products/components/backend-product-preview"
 import { Pagination } from "@modules/store/components/pagination"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 
 const PRODUCT_LIMIT = 12
 
-type PaginatedProductsParams = {
-  limit: number
-  collection_id?: string[]
-  category_id?: string[]
-  id?: string[]
-  order?: string
-}
-
 export default async function PaginatedProducts({
   sortBy,
   page,
-  collectionId,
-  categoryId,
-  productsIds,
-  countryCode,
 }: {
   sortBy?: SortOptions
   page: number
-  collectionId?: string
-  categoryId?: string
-  productsIds?: string[]
   countryCode: string
+  categoryId?: string
+  collectionId?: string
+  productsIds?: string[]
 }) {
-  const queryParams: PaginatedProductsParams = {
-    limit: 12,
-  }
+  const products = await listProducts()
+  const sortedProducts =
+    sortBy === "price_asc"
+      ? [...products].sort((a, b) => backendProductPrice(a) - backendProductPrice(b))
+      : sortBy === "price_desc"
+      ? [...products].sort((a, b) => backendProductPrice(b) - backendProductPrice(a))
+      : [...products].sort((a, b) =>
+          backendProductName(a).localeCompare(backendProductName(b))
+        )
 
-  if (collectionId) {
-    queryParams["collection_id"] = [collectionId]
-  }
-
-  if (categoryId) {
-    queryParams["category_id"] = [categoryId]
-  }
-
-  if (productsIds) {
-    queryParams["id"] = productsIds
-  }
-
-  if (sortBy === "created_at") {
-    queryParams["order"] = "created_at"
-  }
-
-  const region = await getRegion(countryCode)
-
-  if (!region) {
-    return null
-  }
-
-  let {
-    response: { products, count },
-  } = await listProductsWithSort({
-    page,
-    queryParams,
-    sortBy,
-    countryCode,
-  })
-
-  const totalPages = Math.ceil(count / PRODUCT_LIMIT)
+  const start = Math.max(page - 1, 0) * PRODUCT_LIMIT
+  const paginatedProducts = sortedProducts.slice(start, start + PRODUCT_LIMIT)
+  const totalPages = Math.ceil(sortedProducts.length / PRODUCT_LIMIT)
 
   return (
     <>
@@ -72,13 +40,11 @@ export default async function PaginatedProducts({
         className="grid grid-cols-2 w-full small:grid-cols-3 medium:grid-cols-4 gap-x-6 gap-y-8"
         data-testid="products-list"
       >
-        {products.map((p) => {
-          return (
-            <li key={p.id}>
-              <ProductPreview product={p} region={region} />
-            </li>
-          )
-        })}
+        {paginatedProducts.map((product) => (
+          <li key={backendProductName(product)}>
+            <BackendProductPreview product={product} />
+          </li>
+        ))}
       </ul>
       {totalPages > 1 && (
         <Pagination

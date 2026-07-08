@@ -1,49 +1,24 @@
-import { sdk } from "@lib/config"
-import { HttpTypes } from "@medusajs/types"
-import { getCacheOptions } from "./cookies"
+"use server"
 
-export const listCategories = async (query?: Record<string, any>) => {
-  const next = {
-    ...(await getCacheOptions("categories")),
-  }
+import { listCategories as listBackendCategories } from "../../api/backend"
+import { backendSlug, unwrapBackendValue } from "@lib/backend-native"
 
-  const limit = query?.limit || 100
-
-  return sdk.client
-    .fetch<{ product_categories: HttpTypes.StoreProductCategory[] }>(
-      "/store/product-categories",
-      {
-        query: {
-          fields:
-            "*category_children, *products, *parent_category, *parent_category.parent_category",
-          limit,
-          ...query,
-        },
-        next,
-        cache: "force-cache",
-      }
-    )
-    .then(({ product_categories }) => product_categories)
+export const listCategories = async (..._args: any[]) => {
+  const product_categories = await listBackendCategories()
+  return { product_categories, count: product_categories.length }
 }
 
-export const getCategoryByHandle = async (categoryHandle: string[]) => {
-  const handle = `${categoryHandle.join("/")}`
+export const listCategoriesQuery = listCategories
+export const getCategoryByHandle = async (categoryPath: string[] | string): Promise<any | null> => {
+  const handle = Array.isArray(categoryPath)
+    ? categoryPath[categoryPath.length - 1]
+    : categoryPath
+  const { product_categories } = await listCategories()
 
-  const next = {
-    ...(await getCacheOptions("categories")),
-  }
-
-  return sdk.client
-    .fetch<HttpTypes.StoreProductCategoryListResponse>(
-      `/store/product-categories`,
-      {
-        query: {
-          fields: "*category_children, *products",
-          handle,
-        },
-        next,
-        cache: "force-cache",
-      }
-    )
-    .then(({ product_categories }) => product_categories[0])
+  return (
+    product_categories.find(
+      (category: any) => backendSlug(unwrapBackendValue(category.name)) === handle
+    ) ?? null
+  )
 }
+export const getCategoriesList = listCategories

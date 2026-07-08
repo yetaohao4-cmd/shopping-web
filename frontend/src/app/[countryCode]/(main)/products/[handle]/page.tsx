@@ -1,131 +1,100 @@
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { listProducts } from "@lib/data/products"
-import { getRegion, listRegions } from "@lib/data/regions"
-import ProductTemplate from "@modules/products/templates"
-import { HttpTypes } from "@medusajs/types"
+import { addCartItem, listProducts } from "../../../../../api/backend"
+import {
+  backendCategoryName,
+  backendProductAvailableCount,
+  backendProductName,
+  backendProductPrice,
+  backendProductSlug,
+  formatBackendMoney,
+  unwrapBackendValue,
+} from "../../../../../lib/backend-native"
+import Thumbnail from "@modules/products/components/thumbnail"
+import { Button } from "@medusajs/ui"
 
 type Props = {
   params: Promise<{ countryCode: string; handle: string }>
-  searchParams: Promise<{ v_id?: string }>
 }
 
-export async function generateStaticParams() {
-  try {
-    const countryCodes = await listRegions().then((regions) =>
-      regions?.map((r) => r.countries?.map((c) => c.iso_2)).flat()
-    )
-
-    if (!countryCodes) {
-      return []
-    }
-
-    const promises = countryCodes.map(async (country) => {
-      const { response } = await listProducts({
-        countryCode: country,
-        queryParams: { limit: 100, fields: "handle" },
-      })
-
-      return {
-        country,
-        products: response.products,
-      }
-    })
-
-    const countryProducts = await Promise.all(promises)
-
-    return countryProducts
-      .flatMap((countryData) =>
-        countryData.products.map((product) => ({
-          countryCode: countryData.country,
-          handle: product.handle,
-        }))
-      )
-      .filter((param) => param.handle)
-  } catch (error) {
-    console.error(
-      `Failed to generate static paths for product pages: ${
-        error instanceof Error ? error.message : "Unknown error"
-      }.`
-    )
-    return []
-  }
-}
-
-function getImagesForVariant(
-  product: HttpTypes.StoreProduct,
-  selectedVariantId?: string
-) {
-  if (!selectedVariantId || !product.variants) {
-    return product.images
-  }
-
-  const variant = product.variants!.find((v) => v.id === selectedVariantId)
-  if (!variant || !variant.images.length) {
-    return product.images
-  }
-
-  const imageIdsMap = new Map(variant.images.map((i) => [i.id, true]))
-  return product.images!.filter((i) => imageIdsMap.has(i.id))
+async function getProductBySlug(handle: string) {
+  const products = await listProducts()
+  return products.find((product) => backendProductSlug(product) === handle)
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const params = await props.params
-  const { handle } = params
-  const region = await getRegion(params.countryCode)
-
-  if (!region) {
-    notFound()
-  }
-
-  const product = await listProducts({
-    countryCode: params.countryCode,
-    queryParams: { handle },
-  }).then(({ response }) => response.products[0])
+  const { handle } = await props.params
+  const product = await getProductBySlug(handle)
 
   if (!product) {
     notFound()
   }
 
+  const name = backendProductName(product)
   return {
-    title: `${product.title} | Medusa Store`,
-    description: `${product.title}`,
-    openGraph: {
-      title: `${product.title} | Medusa Store`,
-      description: `${product.title}`,
-      images: product.thumbnail ? [product.thumbnail] : [],
-    },
+    title: `${name} | Shopping Web`,
+    description: unwrapBackendValue(product.description),
   }
 }
 
 export default async function ProductPage(props: Props) {
-  const params = await props.params
-  const region = await getRegion(params.countryCode)
-  const searchParams = await props.searchParams
+  const { handle } = await props.params
+  const product = await getProductBySlug(handle)
 
-  const selectedVariantId = searchParams.v_id
-
-  if (!region) {
+  if (!product) {
     notFound()
   }
 
-  const pricedProduct = await listProducts({
-    countryCode: params.countryCode,
-    queryParams: { handle: params.handle },
-  }).then(({ response }) => response.products[0])
-
-  const images = getImagesForVariant(pricedProduct, selectedVariantId)
-
-  if (!pricedProduct) {
-    notFound()
+  async function addProductToCart() {
+    "use server"
+    await addCartItem({
+      product_name: backendProductName(product!),
+      quantity: 1,
+    })
   }
 
   return (
-    <ProductTemplate
-      product={pricedProduct}
-      region={region}
-      countryCode={params.countryCode}
-      images={images}
-    />
+    <div
+      className="content-container flex flex-col small:flex-row small:items-start py-6 relative"
+      data-testid="product-container"
+    >
+      <div className="flex flex-col small:sticky small:top-48 small:py-0 small:max-w-[300px] w-full py-8 gap-y-6">
+        <div>
+          <p className="txt-medium text-ui-fg-muted">
+            {backendCategoryName(product.category)}
+          </p>
+          <h1 className="txt-xlarge-plus text-ui-fg-base mt-2">
+            {backendProductName(product)}
+          </h1>
+          <p className="txt-medium text-ui-fg-subtle mt-4">
+            {unwrapBackendValue(product.description)}
+          </p>
+        </div>
+      </div>
+      <div className="block w-full relative">
+        <div className="grid grid-cols-1 gap-4">
+          <Thumbnail thumbnail={null} images={[]} size="full" />
+        </div>
+      </div>
+      <div className="flex flex-col small:sticky small:top-48 small:py-0 small:max-w-[300px] w-full py-8 gap-y-6">
+        <div className="txt-xlarge-plus text-ui-fg-base">
+          {formatBackendMoney(backendProductPrice(product))}
+        </div>
+        <p className="txt-small text-ui-fg-muted">
+          {backendProductAvailableCount(product)} available
+        </p>
+        <form action={addProductToCart}>
+          <Button
+            type="submit"
+            variant="primary"
+            className="w-full h-10"
+            disabled={backendProductAvailableCount(product) < 1}
+            data-testid="add-product-button"
+          >
+            Add to cart
+          </Button>
+        </form>
+      </div>
+    </div>
   )
 }

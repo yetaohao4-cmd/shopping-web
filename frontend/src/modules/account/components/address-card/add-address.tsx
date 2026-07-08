@@ -9,7 +9,7 @@ import CountrySelect from "@modules/checkout/components/country-select"
 import Input from "@modules/common/components/input"
 import Modal from "@modules/common/components/modal"
 import { SubmitButton } from "@modules/checkout/components/submit-button"
-import { HttpTypes } from "@medusajs/types"
+import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
 import { addCustomerAddress } from "@lib/data/customer"
 
 const AddAddress = ({

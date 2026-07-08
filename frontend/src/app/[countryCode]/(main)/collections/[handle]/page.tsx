@@ -3,7 +3,6 @@ import { notFound } from "next/navigation"
 
 import { getCollectionByHandle, listCollections } from "@lib/data/collections"
 import { listRegions } from "@lib/data/regions"
-import { StoreCollection, StoreRegion } from "@medusajs/types"
 import CollectionTemplate from "@modules/collections/templates"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 
@@ -27,15 +26,15 @@ export async function generateStaticParams() {
   }
 
   const countryCodes = await listRegions().then(
-    (regions: StoreRegion[]) =>
+    (regions: any[]) =>
       regions
-        ?.map((r) => r.countries?.map((c) => c.iso_2))
+        ?.map((r) => r.countries?.map((c: any) => c.country_code))
         .flat()
         .filter(Boolean) as string[]
   )
 
   const collectionHandles = collections.map(
-    (collection: StoreCollection) => collection.handle
+    (collection: any) => collection.handle
   )
 
   const staticParams = countryCodes
@@ -71,9 +70,7 @@ export default async function CollectionPage(props: Props) {
   const params = await props.params
   const { sortBy, page } = searchParams
 
-  const collection = await getCollectionByHandle(params.handle).then(
-    (collection: StoreCollection) => collection
-  )
+  const collection = await getCollectionByHandle(params.handle)
 
   if (!collection) {
     notFound()

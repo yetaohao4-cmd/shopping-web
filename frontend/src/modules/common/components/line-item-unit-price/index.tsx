@@ -1,5 +1,5 @@
 import { convertToLocale } from "@lib/util/money"
-import { HttpTypes } from "@medusajs/types"
+import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
 import { clx } from "@medusajs/ui"
 
 type LineItemUnitPriceProps = {
@@ -13,11 +13,12 @@ const LineItemUnitPrice = ({
   style = "default",
   currencyCode,
 }: LineItemUnitPriceProps) => {
-  const { total, original_total } = item
+  const { total = 0, original_total = total } = item
+  const quantity = item.quantity || 1
   const hasReducedPrice = total < original_total
 
   const percentage_diff = Math.round(
-    ((original_total - total) / original_total) * 100
+    ((original_total - total) / (original_total || 1)) * 100
   )
 
   return (
@@ -33,7 +34,7 @@ const LineItemUnitPrice = ({
               data-testid="product-unit-original-price"
             >
               {convertToLocale({
-                amount: original_total / item.quantity,
+                amount: original_total / quantity,
                 currency_code: currencyCode,
               })}
             </span>
@@ -50,7 +51,7 @@ const LineItemUnitPrice = ({
         data-testid="product-unit-price"
       >
         {convertToLocale({
-          amount: total / item.quantity,
+          amount: total / quantity,
           currency_code: currencyCode,
         })}
       </span>

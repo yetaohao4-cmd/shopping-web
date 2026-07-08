@@ -1,4 +1,4 @@
-import { HttpTypes } from "@medusajs/types"
+import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
 import { Text } from "@medusajs/ui"
 
 type OrderDetailsProps = {

@@ -13,7 +13,7 @@ import ReactCountryFlag from "react-country-flag"
 import { StateType } from "@lib/hooks/use-toggle-state"
 import { useParams, usePathname } from "next/navigation"
 import { updateRegion } from "@lib/data/cart"
-import { HttpTypes } from "@medusajs/types"
+import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
 
 type CountryOption = {
   country: string
@@ -23,7 +23,7 @@ type CountryOption = {
 
 type CountrySelectProps = {
   toggleState: StateType
-  regions: HttpTypes.StoreRegion[]
+  regions: Array<HttpTypes.StoreRegion | any>
 }
 
 const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {
@@ -40,13 +40,16 @@ const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {
   const options = useMemo(() => {
     return regions
       ?.map((r) => {
-        return r.countries?.map((c) => ({
-          country: c.iso_2,
-          region: r.id,
+        return r.countries?.map((c: any) => ({
+          country: c.iso_2 || c.country_code,
+          region: r.id || r.region_id,
           label: c.display_name,
         }))
       })
       .flat()
+      .filter((option): option is CountryOption =>
+        Boolean(option?.country && option?.region && option?.label)
+      )
       .sort((a, b) => (a?.label ?? "").localeCompare(b?.label ?? ""))
   }, [regions])
 

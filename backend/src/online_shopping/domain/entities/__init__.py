@@ -16,7 +16,9 @@ from .order_log import OrderLog
 from .payment import Payment
 from .product import Product
 from .product_category import ProductCategory
+from .product_image import ProductImage
 from .product_review import ProductReview
+from .product_variant import ProductVariant
 from .shipment import Shipment
 from .shipment_log import ShipmentLog
 from .shopping_cart import ShoppingCart
@@ -41,7 +43,9 @@ __all__ = [
     "Payment",
     "Product",
     "ProductCategory",
+    "ProductImage",
     "ProductReview",
+    "ProductVariant",
     "Shipment",
     "ShipmentLog",
     "ShoppingCart",

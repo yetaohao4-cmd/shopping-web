@@ -2,7 +2,7 @@ import React from "react"
 
 import AddAddress from "../address-card/add-address"
 import EditAddress from "../address-card/edit-address-modal"
-import { HttpTypes } from "@medusajs/types"
+import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
 
 type AddressBookProps = {
   customer: HttpTypes.StoreCustomer

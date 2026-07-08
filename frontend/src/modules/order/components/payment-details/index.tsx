@@ -3,7 +3,7 @@ import { Container, Heading, Text } from "@medusajs/ui"
 import { isStripeLike, paymentInfoMap } from "@lib/constants"
 import Divider from "@modules/common/components/divider"
 import { convertToLocale } from "@lib/util/money"
-import { HttpTypes } from "@medusajs/types"
+import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
 
 type PaymentDetailsProps = {
   order: HttpTypes.StoreOrder

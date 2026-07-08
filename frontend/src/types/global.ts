@@ -1,4 +1,4 @@
-import { StorePrice } from "@medusajs/types"
+import type { StorePrice } from "types/backend-native-compat"
 
 export type FeaturedProduct = {
   id: string

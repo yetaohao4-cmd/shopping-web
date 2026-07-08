@@ -1,6 +1,6 @@
 import { listProducts } from "@lib/data/products"
 import { getRegion } from "@lib/data/regions"
-import { HttpTypes } from "@medusajs/types"
+import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
 import Product from "../product-preview"
 
 type RelatedProductsProps = {
@@ -19,7 +19,7 @@ export default async function RelatedProducts({
   }
 
   // edit this function to define your related products logic
-  const queryParams: HttpTypes.StoreProductListParams = {}
+  const queryParams: Record<string, any> = {}
   if (region?.id) {
     queryParams.region_id = region.id
   }

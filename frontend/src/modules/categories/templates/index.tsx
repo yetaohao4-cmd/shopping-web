@@ -7,7 +7,7 @@ import RefinementList from "@modules/store/components/refinement-list"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 import PaginatedProducts from "@modules/store/templates/paginated-products"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import { HttpTypes } from "@medusajs/types"
+import { backendSlug, unwrapBackendValue } from "@lib/backend-native"
 
 export default function CategoryTemplate({
   category,
@@ -15,7 +15,7 @@ export default function CategoryTemplate({
   page,
   countryCode,
 }: {
-  category: HttpTypes.StoreProductCategory
+  category: any
   sortBy?: SortOptions
   page?: string
   countryCode: string
@@ -25,9 +25,9 @@ export default function CategoryTemplate({
 
   if (!category || !countryCode) notFound()
 
-  const parents = [] as HttpTypes.StoreProductCategory[]
+  const parents = [] as any[]
 
-  const getParents = (category: HttpTypes.StoreProductCategory) => {
+  const getParents = (category: any) => {
     if (category.parent_category) {
       parents.push(category.parent_category)
       getParents(category.parent_category)
@@ -46,31 +46,33 @@ export default function CategoryTemplate({
         <div className="flex flex-row mb-8 text-2xl-semi gap-4">
           {parents &&
             parents.map((parent) => (
-              <span key={parent.id} className="text-ui-fg-subtle">
+              <span key={backendSlug(unwrapBackendValue(parent.name))} className="text-ui-fg-subtle">
                 <LocalizedClientLink
                   className="mr-4 hover:text-black"
-                  href={`/categories/${parent.handle}`}
+                  href={`/categories/${backendSlug(unwrapBackendValue(parent.name))}`}
                   data-testid="sort-by-link"
                 >
-                  {parent.name}
+                  {unwrapBackendValue(parent.name)}
                 </LocalizedClientLink>
                 /
               </span>
             ))}
-          <h1 data-testid="category-page-title">{category.name}</h1>
+          <h1 data-testid="category-page-title">
+            {unwrapBackendValue(category.name)}
+          </h1>
         </div>
         {category.description && (
           <div className="mb-8 text-base-regular">
-            <p>{category.description}</p>
+            <p>{unwrapBackendValue(category.description)}</p>
           </div>
         )}
         {category.category_children && (
           <div className="mb-8 text-base-large">
             <ul className="grid grid-cols-1 gap-2">
-              {category.category_children?.map((c) => (
+              {category.category_children?.map((c: any) => (
                 <li key={c.id}>
                   <InteractiveLink href={`/categories/${c.handle}`}>
-                    {c.name}
+                    {unwrapBackendValue(c.name)}
                   </InteractiveLink>
                 </li>
               ))}
@@ -87,7 +89,7 @@ export default function CategoryTemplate({
           <PaginatedProducts
             sortBy={sort}
             page={pageNumber}
-            categoryId={category.id}
+            categoryId={backendSlug(unwrapBackendValue(category.name))}
             countryCode={countryCode}
           />
         </Suspense>

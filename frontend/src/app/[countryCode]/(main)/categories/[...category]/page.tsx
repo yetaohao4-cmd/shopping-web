@@ -3,9 +3,9 @@ import { notFound } from "next/navigation"
 
 import { getCategoryByHandle, listCategories } from "@lib/data/categories"
 import { listRegions } from "@lib/data/regions"
-import { StoreRegion } from "@medusajs/types"
 import CategoryTemplate from "@modules/categories/templates"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
+import { backendSlug, unwrapBackendValue } from "@lib/backend-native"
 
 type Props = {
   params: Promise<{ category: string[]; countryCode: string }>
@@ -16,18 +16,18 @@ type Props = {
 }
 
 export async function generateStaticParams() {
-  const product_categories = await listCategories()
+  const { product_categories } = await listCategories()
 
   if (!product_categories) {
     return []
   }
 
-  const countryCodes = await listRegions().then((regions: StoreRegion[]) =>
-    regions?.map((r) => r.countries?.map((c) => c.iso_2)).flat()
+  const countryCodes = await listRegions().then((regions: any[]) =>
+    regions?.map((r) => r.countries?.map((c: any) => c.country_code)).flat()
   )
 
   const categoryHandles = product_categories.map(
-    (category: any) => category.handle
+    (category: any) => backendSlug(unwrapBackendValue(category.name))
   )
 
   const staticParams = countryCodes
@@ -46,13 +46,18 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params
   try {
     const productCategory = await getCategoryByHandle(params.category)
+    if (!productCategory) {
+      notFound()
+    }
 
-    const title = productCategory.name + " | Medusa Store"
+    const categoryName = unwrapBackendValue(productCategory.name)
+    const title = categoryName + " | Shopping"
 
-    const description = productCategory.description ?? `${title} category.`
+    const description =
+      unwrapBackendValue(productCategory.description) ?? `${title} category.`
 
     return {
-      title: `${title} | Medusa Store`,
+      title,
       description,
       alternates: {
         canonical: `${params.category.join("/")}`,

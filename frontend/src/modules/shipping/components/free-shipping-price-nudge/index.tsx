@@ -2,12 +2,12 @@
 
 import { convertToLocale } from "@lib/util/money"
 import { CheckCircleSolid, XMark } from "@medusajs/icons"
-import {
-  HttpTypes,
+import type {
+  BackendNativeHttpTypes as HttpTypes,
   StoreCart,
   StoreCartShippingOption,
   StorePrice,
-} from "@medusajs/types"
+} from "types/backend-native-compat"
 import { Button, clx } from "@medusajs/ui"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { useState } from "react"
@@ -98,14 +98,14 @@ export default function ShippingPriceNudge({
       // 1. Currency code is same as the cart's
       // 2. Have a rule that is set on item_total
       const validCurrencyPrices = shippingOption.prices.filter(
-        (price) =>
+        (price: any) =>
           price.currency_code === cart.currency_code &&
           (price.price_rules || []).some(
-            (priceRule) => priceRule.attribute === "item_total"
+            (priceRule: any) => priceRule.attribute === "item_total"
           )
       )
 
-      return validCurrencyPrices.map((price) => {
+      return validCurrencyPrices.map((price: any) => {
         return {
           ...price,
           shipping_option_id: shippingOption.id,

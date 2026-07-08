@@ -5,7 +5,7 @@ import FastDelivery from "@modules/common/icons/fast-delivery"
 import Refresh from "@modules/common/icons/refresh"
 
 import Accordion from "./accordion"
-import { HttpTypes } from "@medusajs/types"
+import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
 
 type ProductTabsProps = {
   product: HttpTypes.StoreProduct
@@ -108,7 +108,7 @@ const ShippingInfoTab = () => {
             <span className="font-semibold">Easy returns</span>
             <p className="max-w-sm">
               Just return your product and we&apos;ll refund your money. No
-              questions asked â€“ we&apos;ll do our best to make sure your return
+              questions asked â€?we&apos;ll do our best to make sure your return
               is hassle-free.
             </p>
           </div>

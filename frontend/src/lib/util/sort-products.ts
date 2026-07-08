@@ -1,4 +1,4 @@
-import { HttpTypes } from "@medusajs/types"
+import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 
 interface MinPricedProduct extends HttpTypes.StoreProduct {

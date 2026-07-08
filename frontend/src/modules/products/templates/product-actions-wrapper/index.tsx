@@ -1,5 +1,5 @@
 import { listProducts } from "@lib/data/products"
-import { HttpTypes } from "@medusajs/types"
+import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
 import ProductActions from "@modules/products/components/product-actions"
 
 /**

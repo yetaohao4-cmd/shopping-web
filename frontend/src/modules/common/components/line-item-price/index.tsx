@@ -1,6 +1,6 @@
 import { getPercentageDiff } from "@lib/util/get-percentage-diff"
 import { convertToLocale } from "@lib/util/money"
-import { HttpTypes } from "@medusajs/types"
+import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
 import { clx } from "@medusajs/ui"
 
 type LineItemPriceProps = {
@@ -14,7 +14,7 @@ const LineItemPrice = ({
   style = "default",
   currencyCode,
 }: LineItemPriceProps) => {
-  const { total, original_total } = item
+  const { total = 0, original_total = total } = item
   const originalPrice = original_total
   const currentPrice = total
   const hasReducedPrice = currentPrice < originalPrice

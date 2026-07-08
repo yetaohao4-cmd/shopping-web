@@ -5,7 +5,7 @@ import { Fragment, useMemo } from "react"
 
 import Radio from "@modules/common/components/radio"
 import compareAddresses from "@lib/util/compare-addresses"
-import { HttpTypes } from "@medusajs/types"
+import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
 
 type AddressSelectProps = {
   addresses: HttpTypes.StoreCustomerAddress[]

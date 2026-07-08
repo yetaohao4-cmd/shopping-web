@@ -8,7 +8,7 @@ import X from "@modules/common/icons/x"
 
 import { getProductPrice } from "@lib/util/get-product-price"
 import OptionSelect from "./option-select"
-import { HttpTypes } from "@medusajs/types"
+import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
 import { isSimpleProduct } from "@lib/util/product"
 
 type MobileActionsProps = {
@@ -75,7 +75,7 @@ const MobileActions: React.FC<MobileActionsProps> = ({
           >
             <div className="flex items-center gap-x-2">
               <span data-testid="mobile-title">{product.title}</span>
-              <span>—</span>
+              <span>-</span>
               {selectedPrice ? (
                 <div className="flex items-end gap-x-2 text-ui-fg-base">
                   {selectedPrice.price_type === "sale" && (
@@ -110,7 +110,7 @@ const MobileActions: React.FC<MobileActionsProps> = ({
                 <div className="flex items-center justify-between w-full">
                   <span>
                     {variant
-                      ? Object.values(options).join(" / ")
+                      ? Object.values(options).join(" /聽")
                       : "Select Options"}
                   </span>
                   <ChevronDown />

@@ -2,7 +2,7 @@
 
 import { transferCart } from "@lib/data/customer"
 import { ExclamationCircleSolid } from "@medusajs/icons"
-import { StoreCart, StoreCustomer } from "@medusajs/types"
+import type { StoreCart, StoreCustomer } from "types/backend-native-compat"
 import { Button } from "@medusajs/ui"
 import { useState } from "react"
 

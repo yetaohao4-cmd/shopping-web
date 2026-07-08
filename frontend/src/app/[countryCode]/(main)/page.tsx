@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 
-import { backendProductFixtures } from "../../../api/backend-fixtures"
-import { mapBackendProductToFrontendProduct } from "../../../adapters/backend/product"
+import { listProducts } from "../../../api/backend"
+import BackendProductPreview from "@modules/products/components/backend-product-preview"
 import Hero from "@modules/home/components/hero"
 
 export const metadata: Metadata = {
@@ -13,7 +13,7 @@ export default async function Home(props: {
   params: Promise<{ countryCode: string }>
 }) {
   await props.params
-  const products = backendProductFixtures.map(mapBackendProductToFrontendProduct)
+  const products = (await listProducts()).slice(0, 3)
 
   return (
     <>
@@ -30,25 +30,8 @@ export default async function Home(props: {
         </div>
         <ul className="grid grid-cols-1 gap-6 small:grid-cols-3">
           {products.map((product) => (
-            <li
-              className="border border-ui-border-base bg-ui-bg-base p-6"
-              key={product.name}
-            >
-              <div className="mb-6 aspect-[4/3] bg-ui-bg-subtle" />
-              <p className="text-small-regular text-ui-fg-muted">
-                {product.category.name}
-              </p>
-              <div className="mt-2 flex items-center justify-between">
-                <h3 className="text-base-regular text-ui-fg-base">
-                  {product.name}
-                </h3>
-                <span className="text-base-regular text-ui-fg-subtle">
-                  {product.displayPrice}
-                </span>
-              </div>
-              <p className="mt-4 text-small-regular text-ui-fg-muted">
-                {product.availableItemCount} available
-              </p>
+            <li key={String(product.name)}>
+              <BackendProductPreview product={product} isFeatured />
             </li>
           ))}
         </ul>

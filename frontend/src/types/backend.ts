@@ -61,6 +61,16 @@ export type BackendProductCategory = {
   description: BackendValue<string>
 }
 
+export type BackendRegion = {
+  region_id: string
+  name: string
+  currency_code: string
+  countries: Array<{
+    country_code: string
+    display_name: string
+  }>
+}
+
 export type BackendProduct = {
   name: BackendValue<string>
   description: BackendValue<string>
@@ -83,6 +93,8 @@ export type BackendItem = {
 
 export type BackendShoppingCart = {
   items: BackendItem[]
+  total_quantity?: number
+  subtotal?: number
 }
 
 export type BackendPayment = {
@@ -159,11 +171,10 @@ export type BackendRegisterAccountPayload = BackendLoginPayload & {
 }
 
 export type BackendOrderPayload = {
-  items: Array<{
+  order_number?: string
+  items?: Array<{
     product_name: string
     quantity: number
-    price: number
   }>
-  shipping_address: BackendAddress
   payment?: BackendPayment
 }

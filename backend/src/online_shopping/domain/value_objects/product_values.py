@@ -1,98 +1,243 @@
 from dataclasses import dataclass
+from decimal import Decimal, ROUND_HALF_UP
+import re
 
 
 @dataclass(frozen=True)
-# 表示商品编号，后续用于唯一定位一个商品。
 class ProductId:
     value: int
 
-    # 初始化后校验商品编号，确保编号是正整数。
     def __post_init__(self) -> None:
         if not isinstance(self.value, int) or self.value <= 0:
             raise ValueError("Product ID must be a positive integer.")
 
 
 @dataclass(frozen=True)
-# 表示商品名称，后续用于商品展示和搜索。
 class ProductName:
     value: str
 
-    # 初始化后校验商品名称，确保名称不是空字符串。
     def __post_init__(self) -> None:
         if not isinstance(self.value, str) or not self.value.strip():
             raise ValueError("Product name cannot be empty.")
-        object.__setattr__(self, "value", self.value.strip())
+        value = self.value.strip()
+        if len(value) > 160:
+            raise ValueError("Product name cannot exceed 160 characters.")
+        object.__setattr__(self, "value", value)
 
 
 @dataclass(frozen=True)
-# 表示商品或订单项价格，后续可扩展币种、精度等规则。
+class ProductSlug:
+    value: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.value, str) or not self.value.strip():
+            raise ValueError("Product slug cannot be empty.")
+        value = self.value.strip().lower()
+        if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", value):
+            raise ValueError("Product slug must contain lowercase letters, numbers, and hyphens.")
+        object.__setattr__(self, "value", value)
+
+    @classmethod
+    def from_name(cls, name: ProductName) -> "ProductSlug":
+        value = re.sub(r"[^a-z0-9]+", "-", name.value.lower()).strip("-")
+        return cls(value or "product")
+
+
+@dataclass(frozen=True)
 class Price:
     value: float
 
-    # 初始化后校验价格，确保价格是大于零的数字。
     def __post_init__(self) -> None:
-        if not isinstance(self.value, (int, float)) or self.value <= 0:
+        if not isinstance(self.value, (int, float, Decimal)) or self.value <= 0:
             raise ValueError("Price must be greater than zero.")
-        object.__setattr__(self, "value", float(self.value))
+        value = Decimal(str(self.value)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        object.__setattr__(self, "value", float(value))
+
+    @property
+    def minor_units(self) -> int:
+        return int((Decimal(str(self.value)) * 100).quantize(Decimal("1"), rounding=ROUND_HALF_UP))
 
 
 @dataclass(frozen=True)
-# 表示商品描述，负责限制展示文案的基础长度。
+class CurrencyCode:
+    value: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.value, str):
+            raise TypeError("Currency code must be a string.")
+        value = self.value.strip().lower()
+        if not re.fullmatch(r"[a-z]{3}", value):
+            raise ValueError("Currency code must be a three-letter ISO code.")
+        object.__setattr__(self, "value", value)
+
+
+@dataclass(frozen=True)
 class ProductDescription:
     value: str
 
-    # 初始化后校验商品描述，确保文本类型和长度符合约束。
     def __post_init__(self) -> None:
         if not isinstance(self.value, str):
             raise TypeError("Description must be a string.")
-        if len(self.value) > 500:
+        value = self.value.strip()
+        if len(value) > 500:
             raise ValueError("Description cannot exceed 500 characters.")
+        object.__setattr__(self, "value", value)
+
+
+@dataclass(frozen=True)
+class ProductCount:
+    value: int
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.value, int) or self.value < 0:
+            raise ValueError("Product count cannot be negative.")
+
+
+@dataclass(frozen=True)
+class CategoryId:
+    value: int
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.value, int) or self.value <= 0:
+            raise ValueError("Category ID must be a positive integer.")
+
+
+@dataclass(frozen=True)
+class CategoryName:
+    value: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.value, str) or not self.value.strip():
+            raise ValueError("Category name cannot be empty.")
+        value = self.value.strip()
+        if len(value) > 120:
+            raise ValueError("Category name cannot exceed 120 characters.")
+        object.__setattr__(self, "value", value)
+
+
+@dataclass(frozen=True)
+class CategorySlug:
+    value: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.value, str) or not self.value.strip():
+            raise ValueError("Category slug cannot be empty.")
+        value = self.value.strip().lower()
+        if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", value):
+            raise ValueError("Category slug must contain lowercase letters, numbers, and hyphens.")
+        object.__setattr__(self, "value", value)
+
+    @classmethod
+    def from_name(cls, name: CategoryName) -> "CategorySlug":
+        value = re.sub(r"[^a-z0-9]+", "-", name.value.lower()).strip("-")
+        return cls(value or "category")
+
+
+@dataclass(frozen=True)
+class CategoryDescription:
+    value: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.value, str):
+            raise TypeError("Category description must be a string.")
+        value = self.value.strip()
+        if len(value) > 500:
+            raise ValueError("Category description cannot exceed 500 characters.")
+        object.__setattr__(self, "value", value)
+
+
+@dataclass(frozen=True)
+class Quantity:
+    value: int
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.value, int) or self.value <= 0:
+            raise ValueError("Quantity must be a positive integer.")
+
+
+@dataclass(frozen=True)
+class ProductVariantId:
+    value: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.value, str) or not self.value.strip():
+            raise ValueError("Product variant ID cannot be empty.")
         object.__setattr__(self, "value", self.value.strip())
 
 
 @dataclass(frozen=True)
-# 表示商品可售库存数量，后续可补充非负数校验。
-class ProductCount:
-    value: int
-
-
-@dataclass(frozen=True)
-# 表示商品分类名称，后续用于分类展示和检索。
-class CategoryName:
+class ProductVariantName:
     value: str
 
+    def __post_init__(self) -> None:
+        if not isinstance(self.value, str) or not self.value.strip():
+            raise ValueError("Product variant name cannot be empty.")
+        object.__setattr__(self, "value", self.value.strip())
+
 
 @dataclass(frozen=True)
-# 表示商品分类描述，后续用于说明分类用途。
-class CategoryDescription:
+class Sku:
     value: str
 
+    def __post_init__(self) -> None:
+        if not isinstance(self.value, str) or not self.value.strip():
+            raise ValueError("SKU cannot be empty.")
+        value = self.value.strip()
+        if len(value) > 64:
+            raise ValueError("SKU cannot exceed 64 characters.")
+        object.__setattr__(self, "value", value)
+
 
 @dataclass(frozen=True)
-# 表示购物车或订单中的商品数量。
-class Quantity:
-    value: int
+class ProductImageId:
+    value: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.value, str) or not self.value.strip():
+            raise ValueError("Product image ID cannot be empty.")
+        object.__setattr__(self, "value", self.value.strip())
 
 
 @dataclass(frozen=True)
-# 表示商品评价分数，后续可限制评分范围。
+class ProductImageUrl:
+    value: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.value, str) or not self.value.strip():
+            raise ValueError("Product image URL cannot be empty.")
+        value = self.value.strip()
+        if not (value.startswith("/") or value.startswith("http://") or value.startswith("https://")):
+            raise ValueError("Product image URL must be absolute or root-relative.")
+        object.__setattr__(self, "value", value)
+
+
+@dataclass(frozen=True)
 class Rating:
     value: int
 
+    def __post_init__(self) -> None:
+        if not isinstance(self.value, int) or not 1 <= self.value <= 5:
+            raise ValueError("Rating must be between 1 and 5.")
+
 
 @dataclass(frozen=True)
-# 表示商品评价正文，后续可限制长度和敏感内容。
 class ReviewContent:
     value: str
 
+    def __post_init__(self) -> None:
+        if not isinstance(self.value, str) or not self.value.strip():
+            raise ValueError("Review content cannot be empty.")
+        value = self.value.strip()
+        if len(value) > 1000:
+            raise ValueError("Review content cannot exceed 1000 characters.")
+        object.__setattr__(self, "value", value)
+
 
 @dataclass(frozen=True)
-# 表示按商品名称建立的商品索引映射。
 class ProductNameMap:
     value: dict[str, list[object]]
 
 
 @dataclass(frozen=True)
-# 表示按商品分类建立的商品索引映射。
 class ProductCategoryMap:
     value: dict[str, list[object]]

@@ -1,4 +1,4 @@
-import { HttpTypes } from "@medusajs/types"
+import type { BackendNativeHttpTypes as HttpTypes } from "types/backend-native-compat"
 import { clx } from "@medusajs/ui"
 import React from "react"
 
@@ -19,7 +19,7 @@ const OptionSelect: React.FC<OptionSelectProps> = ({
   "data-testid": dataTestId,
   disabled,
 }) => {
-  const filteredOptions = (option.values ?? []).map((v) => v.value)
+  const filteredOptions = (option.values ?? []).map((v: any) => v.value)
 
   return (
     <div className="flex flex-col gap-y-3">
@@ -28,7 +28,7 @@ const OptionSelect: React.FC<OptionSelectProps> = ({
         className="flex flex-wrap justify-between gap-2"
         data-testid={dataTestId}
       >
-        {filteredOptions.map((v) => {
+        {filteredOptions.map((v: any) => {
           return (
             <button
               onClick={() => updateOption(option.id, v)}

@@ -7,15 +7,15 @@ This document maps the current Python backend domain contract to the current Nex
 Important constraints:
 
 * The backend remains the source of truth.
-* The frontend should adapt through TypeScript types, API services, and adapter functions.
-* The current backend has no HTTP API endpoints, no FastAPI routers, no Pydantic DTOs, and no database field contract.
-* The current frontend is still mostly Medusa-starter shaped and uses `@medusajs/types` / Medusa SDK data functions.
+* The frontend adapts through backend-native TypeScript types, API services, and small display helpers.
+* The current backend exposes FastAPI routers for products, regions, cart, orders, payments, and health checks.
+* The current frontend no longer imports Medusa data types, no longer uses the Medusa SDK config, and no longer calls `/store/...` compatibility routes.
 
-Because no backend DTOs exist yet, mappings below distinguish:
+Mappings below distinguish:
 
 * Backend domain field names from `docs/backend-contract.md`
-* Current frontend/Medusa field names when present
-* Recommended frontend domain types and adapter names for a future integration
+* Former starter frontend field names when present
+* Recommended backend-native frontend types and helper names for future integration
 
 ## 1. Entity Mapping
 
@@ -326,116 +326,108 @@ These should not be sent to the Python backend unless corresponding DTO fields a
 
 The backend uses value objects such as `ProductName(value)`, `Price(value)`, and `Name(first_name, last_name)`.
 
-The frontend should not expose this implementation detail directly unless the backend API serializes value objects as wrappers. Preferred adapter approach:
+The frontend should keep backend field names as the source of truth. If the backend API serializes value objects as wrappers, unwrap them only at display and form boundaries:
 
-* Backend DTOs can remain snake_case and value-object-aware.
-* Frontend display objects should use simple render-ready primitives.
-* Adapter functions should unwrap/wrap values at the API boundary.
+* Backend DTOs remain snake_case and value-object-aware.
+* Frontend types should model backend-native names directly.
+* UI helpers can unwrap values for rendering, but they must not create a Medusa-shaped compatibility model.
 
-## 5. Recommended Frontend Adapters
+## 5. Backend-Native Frontend Boundary Helpers
 
-Create frontend adapters in a dedicated location such as `frontend/src/lib/adapters/backend/*` once API integration starts.
+Do not create a frontend adapter layer that maps the Python backend into Medusa objects. The former `frontend/src/adapters/backend/*` compatibility layer has been removed.
 
-### Product Adapters
+Use small backend-native helpers in `frontend/src/lib/backend-native.ts` and keep API services in `frontend/src/api/backend.ts`.
 
-Recommended functions:
+Current helper responsibilities:
 
 ```ts
-mapBackendProductToFrontendProduct(backend: BackendProduct): FrontendProduct
-mapFrontendProductFormToCreateProductPayload(form: ProductFormValues): CreateProductPayload
-mapFrontendProductFormToUpdateProductPayload(form: ProductFormValues): UpdateProductPayload
-mapBackendCategoryToFrontendCategory(backend: BackendProductCategory): FrontendCategory
-mapFrontendCategoryFormToPayload(form: CategoryFormValues): ProductCategoryPayload
+unwrapBackendValue(value)
+backendSlug(value)
+formatBackendMoney(amount, currency)
+backendProductName(product)
+backendProductSlug(product)
+backendProductPrice(product)
+backendProductAvailableCount(product)
+backendLineTotal(item)
 ```
 
 Responsibilities:
 
-* Map `name` to `title` or standardize frontend on `name`.
+* Standardize frontend on backend `name`.
 * Unwrap `ProductName.value`, `ProductDescription.value`, `Price.value`, and `ProductCount.value` if API uses value-object wrappers.
-* Map `available_item_count` to `availableItemCount`.
-* Provide placeholder/optional image fields because backend currently has no image model.
-* Avoid assuming product `handle` exists until backend adds one.
+* Keep `available_item_count` as the frontend field name.
+* Generate display slugs from backend names only for routes and links.
+* Avoid assuming a Medusa `handle`, `variant_id`, or collection model exists.
 
-### User/Account Adapters
+### Product Forms
 
-Recommended functions:
+Recommended form payload helpers, if product forms are added:
 
 ```ts
-mapBackendAccountToFrontendUser(account: BackendAccount): FrontendUser
-mapFrontendLoginFormToLoginPayload(form: LoginFormValues): LoginPayload
-mapFrontendRegisterFormToCreateAccountPayload(form: RegisterFormValues): CreateAccountPayload
-mapFrontendProfileFormToUpdateAccountPayload(form: ProfileFormValues): UpdateAccountPayload
+buildCreateProductPayload(form): BackendProductFormPayload
+buildUpdateProductPayload(form): Partial<BackendProductFormPayload>
 ```
 
 Responsibilities:
 
-* Map `user_name` to `userName`.
-* Map `Name(first_name, last_name)` to frontend name fields.
-* Map backend structured `Phone` to frontend phone display/input shape.
-* Never map backend `password` into frontend display state.
-* Never expose raw card/bank details.
+* Submit `name`, `description`, `price`, `available_item_count`, and nested `category`.
+* Preserve backend snake_case payload keys.
+* Validate UI form values before calling `frontend/src/api/backend.ts`.
 
-### Address Adapters
+### Account Forms
 
-Recommended functions:
+Recommended form payload helpers, if account endpoints are added:
 
 ```ts
-mapBackendAddressToFrontendAddress(address: BackendAddress): FrontendAddress
-mapFrontendAddressFormToBackendAddressPayload(form: AddressFormValues): BackendAddressPayload
+buildLoginPayload(form): BackendLoginPayload
+buildRegisterAccountPayload(form): BackendRegisterAccountPayload
 ```
 
 Responsibilities:
 
-* Map `street` to current frontend `address1`/`address_1` equivalent.
-* Map `state` to `province` only if maintaining Medusa-form compatibility.
-* Decide whether `country` should be country name or ISO code before API integration.
+* Submit backend `user_name`, `password`, `name`, `shipping_address`, `email`, and `phone`.
+* Preserve backend `first_name`, `last_name`, `country_code`, and `postal_code` naming.
 * Preserve backend required fields: street, city, state, postal_code, country.
+* Never expose raw passwords or payment details in frontend display state.
 
-### Cart Adapters
+### Cart Helpers
 
-Recommended functions:
+Current cart calls should use:
 
 ```ts
-mapBackendCartToFrontendCart(cart: BackendShoppingCart): FrontendCart
-mapBackendItemToFrontendCartItem(item: BackendItem): FrontendCartItem
-mapFrontendAddToCartToBackendPayload(input: AddToCartInput): AddCartItemPayload
-mapFrontendQuantityUpdateToBackendPayload(input: UpdateCartQuantityInput): UpdateCartItemPayload
+addCartItem({ product_name, quantity })
+updateCartItem(product_name, quantity)
+deleteCartItem(product_name)
 ```
 
 Responsibilities:
 
-* Map `Item.quantity.value` to `quantity`.
-* Map `Item.price.value` to unit price or line subtotal depending on backend DTO.
-* Remove Medusa-only `variant_id` unless backend adds variants.
-* Compute cart totals on frontend only if backend does not return totals.
+* Keep `product_name` as the cart item identity until the backend exposes a separate product id or variant id.
+* Render `Item.quantity`, `Item.price`, and nested `product` through backend-native helpers.
+* Compute cart totals only when the backend response does not include them.
 
-### Order Adapters
+### Order Helpers
 
-Recommended functions:
+Current order calls should use:
 
 ```ts
-mapBackendOrderToFrontendOrder(order: BackendOrder): FrontendOrder
-mapFrontendOrderFormToCreateOrderPayload(form: OrderFormValues): CreateOrderPayload
-mapBackendOrderLogToFrontendStatusEvent(log: BackendOrderLog): FrontendOrderStatusEvent
+placeOrder(payload?: BackendOrderPayload)
+listOrders()
+getOrder(order_number)
 ```
 
 Responsibilities:
 
-* Map `order_number` to `orderNumber`.
-* Map `order_date` to an ISO string/date display object.
-* Map `order_logs` to timeline events.
-* Map nested `items`, `payment`, and `shipments`.
-* Handle enum values directly as strings.
-* Track the unresolved `OrderNumber` vs `OrderId` contract gap.
+* Keep `order_number`, `order_date`, `order_logs`, `items`, `payment`, and `shipments`.
+* Render enum values directly as backend strings.
+* Treat order transfer, returns, and refunds as unsupported until backend endpoints exist.
 
-### Payment Adapters
+### Payment Helpers
 
-Recommended functions:
+Payment UI should remain disabled or manual unless backend-native payment endpoints are connected:
 
 ```ts
-mapBackendPaymentToFrontendPayment(payment: BackendPayment): FrontendPayment
-mapFrontendCardPaymentFormToBackendPayload(form: CardPaymentFormValues): CreditCardPaymentPayload
-mapFrontendBankTransferFormToBackendPayload(form: BankTransferFormValues): BankTransferPaymentPayload
+processPayment(payload)
 ```
 
 Responsibilities:
@@ -446,14 +438,14 @@ Responsibilities:
 * Treat `card_number`, `code`, `routing_number`, and `account_number` as write-only fields.
 * Prefer tokenized payment methods if backend later supports a payment gateway.
 
-### Shipment Adapters
+### Shipment Helpers
 
-Recommended functions:
+Recommended helpers, if shipment UI is added:
 
 ```ts
-mapBackendShipmentToFrontendShipment(shipment: BackendShipment): FrontendShipment
-mapBackendShipmentLogToFrontendShipmentEvent(log: BackendShipmentLog): FrontendShipmentEvent
-mapFrontendShipmentFormToBackendPayload(form: ShipmentFormValues): ShipmentPayload
+formatShipmentDate(shipment)
+formatShipmentStatus(status)
+buildShipmentPayload(form)
 ```
 
 Responsibilities:
@@ -462,20 +454,18 @@ Responsibilities:
 * Map `shipment_method.value` to display text.
 * Map `ShipmentStatus` enum strings directly.
 
-### Notification Adapters
+### Notification Helpers
 
-Recommended functions:
+Recommended helpers, if notification UI is added:
 
 ```ts
-mapBackendNotificationToFrontendNotification(notification: BackendNotification): FrontendNotification
-mapBackendEmailNotificationToFrontendNotification(notification: BackendEmailNotification): FrontendNotification
-mapBackendSmsNotificationToFrontendNotification(notification: BackendSmsNotification): FrontendNotification
+formatNotificationCreatedOn(notification)
+formatNotificationContent(notification)
 ```
 
 Responsibilities:
 
-* Map `notification_id` to `notificationId`.
-* Map `created_on` to `createdOn`.
+* Keep `notification_id` and `created_on` as backend-native field names.
 * Unwrap `content.value`.
 * Represent channel-specific recipient fields safely.
 
@@ -484,11 +474,11 @@ Responsibilities:
 Use separate types for each layer:
 
 1. `Backend*Payload` / `Backend*Response`: mirrors backend DTOs exactly, likely snake_case.
-2. `Frontend*`: render-ready camelCase objects used by components.
+2. `Backend*`: render-ready backend-native objects used by components when possible.
 3. `*FormValues`: form state objects matching frontend controls.
-4. Adapter functions: the only place where naming, value-object wrappers, date serialization, and sensitive-field filtering happen.
+4. Backend-native helper functions: unwrap value objects, format dates/money, and filter sensitive fields without changing field names.
 
-This separation allows the backend to remain unchanged while the frontend adapts cleanly.
+This separation allows the backend to remain unchanged while the frontend stays backend-native.
 
 ## Integration Warnings
 
@@ -497,4 +487,4 @@ This separation allows the backend to remain unchanged while the frontend adapts
 * Do not assume current Medusa routes map to the Python backend.
 * Do not send Medusa-only fields to the Python backend without backend DTO support.
 * Do not return sensitive payment fields to the frontend.
-* Do not implement adapters until backend API DTOs or endpoint paths are defined.
+* Do not reintroduce a Medusa-shaped adapter or `/store/...` compatibility layer.
