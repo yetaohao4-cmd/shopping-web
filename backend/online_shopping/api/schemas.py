@@ -114,6 +114,7 @@ class AccountOut(BaseModel):
     shipping_address: AddressOut
     email: str
     phone: PhoneOut
+    addresses: list[AddressOut] = []
 
 
 class LoginPayload(BaseModel):

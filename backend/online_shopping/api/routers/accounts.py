@@ -46,6 +46,7 @@ def _account_to_out(account: Account) -> AccountOut:
             country_code=account.phone_country_code or "",
             number=account.phone_number or "",
         ),
+        addresses=[_address_to_out(a) for a in account.addresses],
     )
 
 

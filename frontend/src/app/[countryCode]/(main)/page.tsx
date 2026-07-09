@@ -24,7 +24,7 @@ export default async function Home(props: {
             <p className="text-small-regular text-ui-fg-muted">Featured</p>
             <h2 className="text-2xl text-ui-fg-base">New arrivals</h2>
           </div>
-          <a className="text-small-regular text-ui-fg-subtle hover:text-ui-fg-base" href="/us/store">
+          <a className="text-small-regular text-ui-fg-subtle hover:text-ui-fg-base" href="./store">
             View store
           </a>
         </div>
