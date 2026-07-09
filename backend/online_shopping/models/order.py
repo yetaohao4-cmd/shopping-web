@@ -1,11 +1,18 @@
+from __future__ import annotations
+
 import uuid
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import String, Numeric, Integer, DateTime, ForeignKey, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from online_shopping.models import Base
+
+if TYPE_CHECKING:
+    from online_shopping.models.account import Account
+    from online_shopping.models.payment import Payment
 
 
 class Order(Base):
@@ -19,9 +26,9 @@ class Order(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
-    account: Mapped["Account | None"] = relationship("Account", back_populates="orders")
-    items: Mapped[list["OrderItem"]] = relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
-    payments: Mapped[list["Payment"]] = relationship("Payment", back_populates="order")
+    account: Mapped[Account | None] = relationship("Account", back_populates="orders")
+    items: Mapped[list[OrderItem]] = relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
+    payments: Mapped[list[Payment]] = relationship("Payment", back_populates="order")
 
 
 class OrderItem(Base):
@@ -35,4 +42,4 @@ class OrderItem(Base):
     price: Mapped[float] = mapped_column(Numeric(12, 2), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
-    order: Mapped["Order"] = relationship("Order", back_populates="items")
+    order: Mapped[Order] = relationship("Order", back_populates="items")

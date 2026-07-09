@@ -1,11 +1,19 @@
+from __future__ import annotations
+
 import uuid
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import String, Text, Numeric, Integer, DateTime, ForeignKey, func
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from online_shopping.models import Base
+
+if TYPE_CHECKING:
+    from online_shopping.models.category import ProductCategory
+    from online_shopping.models.product_image import ProductImage
+    from online_shopping.models.product_variant import ProductVariant
 
 
 class Product(Base):
@@ -23,6 +31,6 @@ class Product(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
-    category: Mapped["ProductCategory | None"] = relationship("ProductCategory", back_populates="products")
-    images: Mapped[list["ProductImage"]] = relationship("ProductImage", back_populates="product", cascade="all, delete-orphan")
-    variants: Mapped[list["ProductVariant"]] = relationship("ProductVariant", back_populates="product", cascade="all, delete-orphan")
+    category: Mapped[ProductCategory | None] = relationship("ProductCategory", back_populates="products")
+    images: Mapped[list[ProductImage]] = relationship("ProductImage", back_populates="product", cascade="all, delete-orphan")
+    variants: Mapped[list[ProductVariant]] = relationship("ProductVariant", back_populates="product", cascade="all, delete-orphan")
